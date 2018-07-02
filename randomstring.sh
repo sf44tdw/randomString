@@ -38,5 +38,4 @@ fi
 
 isIntAndGtZero ${LENGTH}
 isIntAndGtZero ${LINES}
-
-cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${LENGTH} | head -${LINES}
+cat /dev/urandom | tr -dc "[:graph:]" | fold -w ${LENGTH} | head -n ${LINES}
