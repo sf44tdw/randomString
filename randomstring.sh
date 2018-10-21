@@ -1,7 +1,39 @@
 #!/bin/bash
 
-#文字種、文字数、行数を指定すると、その文字数のランダム文字列を行数分生成する。
-#文字種はtrコマンドのSETと同じ。
+
+usage_exit() {
+        echo "Usage: $0 [-t type] [-n number] [-l lines]" 1>&2
+        echo "文字種、文字数、行数を指定すると、その文字数のランダム文字列を行数分生成する。" 1>&2
+        echo "文字種はtrコマンドのSETと同じ。省略した場合は'[:graph:]'がセットされる。" 1>&2
+        echo "-t 文字種" 1>&2
+        echo "-n 文字数" 1>&2
+        echo "-l 行数" 1>&2
+        exit 1
+}
+
+ENABLE_t="f"
+ENABLE_n="f"
+ENABLE_l="f"
+
+while getopts t:n:l: OPT
+do
+    case $OPT in
+        t)  ENABLE_t="t";CHAR_TYPE="${OPTARG}"
+            ;;
+        n)  ENABLE_n="t";LENGTH="${OPTARG}"
+            ;;
+        l)  ENABLE_l="t";LINES="${OPTARG}"
+            ;;
+        :|\?) usage_exit
+            ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
+[ "${ENABLE_t}" != "t" ] && CHAR_TYPE='[:graph:]'
+[ "${ENABLE_n}" != "t" ] && usage_exit
+[ "${ENABLE_l}" != "t" ] && usage_exit
 
 function isNumeric(){
 local total=0
@@ -27,16 +59,6 @@ else
   exit -1
 fi
 }
-
-#引数の長さが3ならば代入
-if [ $# -eq 3 ]; then
-   CHAR_TYPE=$1
-   LENGTH=$2
-   LINES=$3
-else
-   echo "引数過不足。文字種、文字数、1行の文字数と行数を指定すること。（3個）"
-   exit -1
-fi
 
 isIntAndGtZero ${LENGTH}
 isIntAndGtZero ${LINES}
