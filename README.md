@@ -1,4 +1,4 @@
 # randomString
 ランダム文字列を生成するだけ
 
-mkpasswd (expect二収録されている)もしくはpwgenを利用すべき。
+可能であればこれではなくmkpasswd(expectパッケージに収録されている)か、pwgenを利用すべきである。
